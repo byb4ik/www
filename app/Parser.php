@@ -37,6 +37,7 @@ class Parser
         $this->domobj->preserveWhiteSpace = false;
         @$this->domobj->loadHTML($html);
         $this->domxpath = new DOMXpath($this->domobj);
+
         return true;
     }
 
@@ -76,6 +77,7 @@ class Parser
         foreach ($img as $val) {
             $article['img'] = $val->getAttribute('src');
         }
+
         return $article;
     }
 }

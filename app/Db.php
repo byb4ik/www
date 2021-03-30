@@ -2,21 +2,24 @@
 
 class Db
 {
+    /**
+     * @var PDO
+     */
     protected $dbh;
 
+    /**
+     * Db constructor.
+     */
     public function __construct()
     {
         $this->dbh = new \PDO('mysql:host=localhost;dbname=parser', 'user', 'user');
     }
 
-    public function query($sql, $class = \stdClass::class, $data = [])
-    {
-        $sth = $this->dbh->prepare($sql);
-        $sth->execute($data);
-
-        return $sth->fetchAll(\PDO::FETCH_CLASS, $class);
-    }
-
+    /**
+     * @param $sql
+     * @param array $data
+     * @return bool
+     */
     public function execute($sql, $data = [])
     {
         $sth = $this->dbh->prepare($sql);
