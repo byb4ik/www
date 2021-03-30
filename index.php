@@ -1,38 +1,30 @@
 <?php
 require __DIR__ . '/autoload.php';
-
-
-$url = 'https://ru.investing.com/news/forex-news';
-
-//$url = 'https://ru.investing.com/news/forex-news/article-2043944';
-
+//ссылка на категорию
+$url_category = 'https://ru.investing.com/news/forex-news';
+//шаблон пасринга ссылок категории
+$link_pattern = ".//*[@class='largeTitle']/article/a";
+//шаблоны парсинга статьи
+$pattern = [
+    'title' => ".//*[@class='articleHeader']",
+    'p' => ".//*[@class='WYSIWYG articlePage']/p",
+    'img' => ".//*[@class='WYSIWYG articlePage']/div[@class='imgCarousel']/img",
+];
+//создание объекта парсера
 $curl = new Parser();
+//пасрим ссылки на статьи со страницы категории
+$curl->parse_link($url_category);
+//заполняем массив ссылками на новости
+$links = $curl->getlinkfromxpath($link_pattern);
+var_dump($links);
+foreach ($links  as $link){
+    //парсим данные
+    $curl->parse_link($link);
+    $article = $curl->getarticle($pattern);
+    var_dump($article);
+    //сохраняем в базу
+    $obj = new Model();
+    $obj->insert(['title' => $article['title'], 'text' => $article['text'], 'imgsrc' => $article['img']]);
 
-$elements = $curl->parse($url)->query(".//*[@class='largeTitle']/article/a");
-//    $imgs[] = $xpath->query("/html/body/div[5]/section/div[4]/article[$i]/a/img");
-
-foreach ($elements as $element) {
-    preg_match('\'https\'', $element->getAttribute('href'), $matches);
-    if ($matches == null) {
-        $link_list[] = 'https://ru.investing.com' . $element->getAttribute('href');
-    } else {
-        $link_list[] = $element->getAttribute('href');
-    }
 }
 
-//var_dump($link_list);
-//foreach($imgs as $img){
-//    var_dump($img[0]->getAttribute('data-src'));
-//    //var_dump($element);
-//    //var_dump($element[0]->nodeValue);
-//}
-
-//text one article
-//$elements = $xpath->query(".//*[@class='WYSIWYG articlePage']/p");
-//
-//foreach ($elements as $element){
-//    print_r($element->textContent);
-//}
-
-$obj = new Model();
-$obj->insert(['title' => 'bla', 'text' => 'blabla', 'imgsrc' => 'img']);
