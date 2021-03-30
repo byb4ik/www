@@ -1,5 +1,5 @@
-развернуть проект 
-git clone https://github.com/byb4ik/www
-подготовить базу с соответсвующими полями
-news (id, title, text, imgsrc)
-файл index.php точка входа
+развернуть проект  <br>
+git clone https://github.com/byb4ik/www  <br>
+подготовить базу с соответсвующими полями  <br>
+news (id, title(text), text(longtext), imgsrc(varchar255))  <br>
+файл index.php точка входа  <br>
